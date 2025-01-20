@@ -1,9 +1,19 @@
+let limitOfTries = 3; 
 let listOfNumbers = [];
 let tentativas = 1;
+
 
 function textOnPage(tag, texto) {
     tag = document.querySelector(tag);
     tag.innerHTML = texto;
+    if ('speechSynthesis' in window) {
+        let utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'en-US'; 
+        utterance.rate = 1.2; 
+        window.speechSynthesis.speak(utterance); 
+    } else {
+        console.log("Web Speech API não suportada neste navegador.");
+    }
 }
 
 function initialMessage() {
@@ -12,7 +22,13 @@ function initialMessage() {
 }
 
 function secretNumberGenerator() {
-    let chosenNumber = parseInt(Math.random() * 4 + 1);
+    let chosenNumber = parseInt(Math.random() * limitOfTries + 1);
+    let quantityOfItemsInTheList = listOfNumbers.length;
+
+    if (quantityOfItemsInTheList == limitOfTries) {
+        listOfNumbers = []
+    }
+
     if (listOfNumbers.includes(chosenNumber)) {
         return secretNumberGenerator();
     } else {
